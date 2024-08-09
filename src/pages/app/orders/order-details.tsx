@@ -19,6 +19,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 
+import { OrderDetailsSkeleton } from './order-details-skeleton'
 import { OrderStatus } from './order-status'
 
 export interface OrderDetailsProps {
@@ -33,17 +34,14 @@ export function OrderDetails({ orderId, open }: OrderDetailsProps) {
     enabled: open,
   })
 
-  if (!order) {
-    return null
-  }
-
   return (
     <DialogContent>
       <DialogHeader>
-        <DialogTitle>{orderId}</DialogTitle>
-        <DialogDescription>Detalhe do pedido</DialogDescription>
+        <DialogTitle>Pedido: {orderId}</DialogTitle>
+        <DialogDescription>Detalhes do pedido</DialogDescription>
       </DialogHeader>
-      {order && (
+
+      {order ? (
         <div className="space-y-6">
           <Table>
             <TableBody>
@@ -56,11 +54,7 @@ export function OrderDetails({ orderId, open }: OrderDetailsProps) {
               <TableRow>
                 <TableCell className="text-muted-foreground">Cliente</TableCell>
                 <TableCell className="flex justify-end">
-                  <div className="flex items-center gap-2">
-                    <span className="font-medium text-muted-foreground">
-                      {order.customer.name}
-                    </span>
-                  </div>
+                  {order.customer.name}
                 </TableCell>
               </TableRow>
               <TableRow>
@@ -68,21 +62,13 @@ export function OrderDetails({ orderId, open }: OrderDetailsProps) {
                   Telefone
                 </TableCell>
                 <TableCell className="flex justify-end">
-                  <div className="flex items-center gap-2">
-                    <span className="font-medium text-muted-foreground">
-                      {order.customer.phone ?? 'Não informado'}
-                    </span>
-                  </div>
+                  {order.customer.phone ?? 'Não informado'}
                 </TableCell>
               </TableRow>
               <TableRow>
                 <TableCell className="text-muted-foreground">E-mail</TableCell>
                 <TableCell className="flex justify-end">
-                  <div className="flex items-center gap-2">
-                    <span className="font-medium text-muted-foreground">
-                      {order.customer.email}
-                    </span>
-                  </div>
+                  {order.customer.email}
                 </TableCell>
               </TableRow>
               <TableRow>
@@ -90,14 +76,10 @@ export function OrderDetails({ orderId, open }: OrderDetailsProps) {
                   Realizado há
                 </TableCell>
                 <TableCell className="flex justify-end">
-                  <div className="flex items-center gap-2">
-                    <span className="font-medium text-muted-foreground">
-                      {formatDistanceToNow(order.createdAt, {
-                        locale: ptBR,
-                        addSuffix: true,
-                      })}
-                    </span>
-                  </div>
+                  {formatDistanceToNow(order.createdAt, {
+                    locale: ptBR,
+                    addSuffix: true,
+                  })}
                 </TableCell>
               </TableRow>
             </TableBody>
@@ -113,26 +95,24 @@ export function OrderDetails({ orderId, open }: OrderDetailsProps) {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {order.orderItems.map((product) => (
-                <TableRow key={product.id}>
-                  <TableCell>{product.product.name}</TableCell>
+              {order.orderItems.map((item) => (
+                <TableRow key={item.id}>
+                  <TableCell>{item.product.name}</TableCell>
+                  <TableCell className="text-right">{item.quantity}</TableCell>
                   <TableCell className="text-right">
-                    {product.quantity}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    {(product.priceInCents / 100).toLocaleString('pt-BR', {
+                    {(item.priceInCents / 100).toLocaleString('pt-BR', {
                       style: 'currency',
                       currency: 'BRL',
                     })}
                   </TableCell>
                   <TableCell className="text-right">
-                    {(
-                      (product.priceInCents * product.quantity) /
-                      100
-                    ).toLocaleString('pt-BR', {
-                      style: 'currency',
-                      currency: 'BRL',
-                    })}
+                    {((item.priceInCents * item.quantity) / 100).toLocaleString(
+                      'pt-BR',
+                      {
+                        style: 'currency',
+                        currency: 'BRL',
+                      },
+                    )}
                   </TableCell>
                 </TableRow>
               ))}
@@ -150,6 +130,8 @@ export function OrderDetails({ orderId, open }: OrderDetailsProps) {
             </TableFooter>
           </Table>
         </div>
+      ) : (
+        <OrderDetailsSkeleton />
       )}
     </DialogContent>
   )
