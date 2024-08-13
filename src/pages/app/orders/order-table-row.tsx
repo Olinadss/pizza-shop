@@ -10,11 +10,11 @@ import { cancelOrder } from '@/api/cancel-order'
 import { deliverOrder } from '@/api/deliver-order'
 import { dispatchOrder } from '@/api/dispatch-order'
 import type { GetOrdersResponse } from '@/api/get-orders'
+import { OrderStatus } from '@/components/order-status'
 import { Button } from '@/components/ui/button'
 import { TableCell, TableRow } from '@/components/ui/table'
 
 import { OrderDetails } from './order-details'
-import { OrderStatus } from '../../../components/order-status'
 
 export interface OrderTableRowProps {
   order: {

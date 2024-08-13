@@ -3,7 +3,8 @@ import { render } from '@testing-library/react'
 import { HelmetProvider } from 'react-helmet-async'
 import { MemoryRouter } from 'react-router-dom'
 
-import { queryClient } from '../../lib/react-query'
+import { queryClient } from '@/lib/react-query'
+
 import { SignIn } from './sign-in'
 
 describe('SingIn', () => {
