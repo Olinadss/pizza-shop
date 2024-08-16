@@ -14,7 +14,7 @@ test('display month orders amount metric', async ({ page }) => {
   expect(page.getByText('+7% em relação ao mês passado')).toBeVisible()
 })
 
-test('display montg canceled orders amount metric', async ({ page }) => {
+test('display month canceled orders amount metric', async ({ page }) => {
   await page.goto('/', { waitUntil: 'networkidle' })
 
   expect(page.getByText('5', { exact: true })).toBeVisible()
